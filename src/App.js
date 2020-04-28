@@ -1,64 +1,97 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
-import logo from './logo.svg';
+import { Route, Link, Switch } from 'react-router-dom';
 import './App.css';
 import config from './config';
+import PlaylistContext from './PlaylistContext'
+import Landing from './Landingpage/Landing'
+import Homepage from './Homepage/Homepage'
+import test_genres from './test-genres'
 
 class App extends Component {
   state = {
     genres: [],
+    playlists: [],
+    user: null,
     error: null,
   }
 
   setGenres = genres => {
     this.setState({
       genres,
-      error: null,
+      user: this.state.user,
+      error: this.state.error,
+    })
+  }
+
+  setPlaylists = playlists => {
+    this.setState({
+      playlists,
+      user: this.state.user,
+      error: this.state.error,
     })
   }
 
   componentDidMount() {
-    fetch(config.ENDPOINT,
-      {
-        method: 'GET',
-        mode: "cors",
-        headers: {
-          'content-type': 'application/json',
-        },
-      })
-      .then((res) => {
-        if (!res.ok)
-          return res.json().then(e => Promise.reject(e));
+    // let endpoint = config.ENDPOINT
+    // Promise.all([
+    //   fetch(endpoint + '/playlists'),
+    //   fetch(endpoint + '/genres')
+    // ],
+    //   {
+    //     method: 'GET',
+    //     headers: {
+    //       'content-type': 'application/json',
+    //     },
+    //   })
+    //   .then(([playlistRes, genreRes]) => {
+    //     if (!playlistRes.ok)
+    //       return playlistRes.json().then(error => Promise.reject(error))
+    //     if (!genreRes.ok)
+    //       return genreRes.json().then(error => Promise.reject(error))
+    //     return Promise.all([playlistRes, genreRes.json()])
+    //   })
+    //   .then(([playlist, genres]) => {
+    //     this.setPlaylists(playlist)
+    //     this.setGenres(genres)
+    //   })
+    //   .catch(error => {
+    //     console.error({ error });
+    //     this.setState({ error })
+    //   });
+    this.setState({
+      genres: test_genres
+    })
+  }
 
-
-        return res.json();
-      })
-      .then((apiKey) => {
-        console.log(apiKey)
-
-      })
-      .catch(error => {
-        console.error({ error });
-      });
+  pageUpdate = () => {
+    this.componentDidUpdate()
   }
 
   render() {
+    const contextValue = {
+      genres: this.state.genres,
+      playlists: this.state.playlists,
+      pageUpdate: this.pageUpdate
+    }
+
     return (
       <div className="App" >
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-        </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-        </a>
+          <Link to={'/'} id="home-link">
+            <h1>ShowTunes</h1>
+          </Link>
+          <hr />
         </header>
+        <PlaylistContext.Provider value={contextValue}>
+          <main id="stage">
+            <Switch>
+              <Route exact path='/' component={Landing} />
+              <Route path='/homepage' component={Homepage} />
+              <Route path='/existing-playlists' component={Homepage} />
+            </Switch>
+
+          </main>
+        </PlaylistContext.Provider>
       </div>
     );
   }

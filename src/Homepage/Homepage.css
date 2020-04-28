@@ -1,0 +1,106 @@
+#play-stage {
+    text-align: center;
+}
+
+#genres {
+    display: flex;
+    flex-wrap: wrap;
+    font-family: 'Monoton', cursive;
+    margin: 10px;
+}
+
+#input-wrap {
+    display: flex;
+}
+
+.inputs {
+    flex: 1 0 25%;
+    margin: 5px;
+    font-size: 1.3em;
+}
+
+.error {
+    color: #f24537;
+    font-family: 'Open Sans', 'Helvetica Neue', 'Segoe UI', 'Calibri', 'Arial', sans-serif;
+}
+
+label {
+    user-select: none;
+}
+
+.inputs>input[type=text] {
+    width: 50%;
+    box-sizing: border-box;
+    font-size: .8em;
+}
+
+select {
+    margin: 0 auto;
+    font-family: 'Open Sans', 'Helvetica Neue', 'Segoe UI', 'Calibri', 'Arial', sans-serif;
+    font-size: 18px;
+    color: #60666d;
+}
+
+#hour-set #min-set {
+    width: 20%;
+}
+
+.genre-option {
+    flex: 1 0 25%;
+    margin: 5px;
+    height: 75px;
+    background-color: powderblue;
+    font-size: 1.8em;
+    border-radius: 3%;
+    padding-top: 3%;
+}
+
+.genre-option>input {
+    display: none;
+}
+
+.checked {
+    background-color: goldenrod;
+}
+
+.genre-option:hover, .genre-option:active {
+    background-color: darkorchid;
+    cursor: pointer;
+}
+
+.option-text {
+    text-align: center
+}
+
+#create {
+    box-shadow: inset 0px -3px 7px 0px #29bbff;
+    background: linear-gradient(to bottom, #2dabf9 5%, #0688fa 100%);
+    background-color: #2dabf9;
+    border-radius: 3px;
+    border: 1px solid #0b0e07;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: Arial;
+    font-size: 15px;
+    padding: 9px 23px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #263666;
+    margin-bottom: 20px;
+}
+
+#create:hover {
+    background: linear-gradient(to bottom, #c62d1f 5%, #f24537 100%);
+    background-color: #c62d1f;
+}
+
+#create:disabled {
+    background: linear-gradient(to bottom, #60666d 5%, #60666d 100%);
+    background-color: #60666d;
+    box-shadow: none;
+}
+
+#create:active {
+    position: relative;
+    top: 1px;
+}
