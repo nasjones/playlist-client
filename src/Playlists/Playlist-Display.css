@@ -1,0 +1,12 @@
+#playlistContent {
+    text-align: center;
+    flex: 1;
+}
+
+#playlistDisplay {
+    display: flex;
+}
+
+#playlist-title {
+    font-family: 'Bungee Shade', cursive;
+}

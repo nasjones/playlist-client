@@ -5,7 +5,7 @@
 #genres {
     display: flex;
     flex-wrap: wrap;
-    font-family: 'Monoton', cursive;
+    font-family: 'kavoon', cursive;
     margin: 10px;
 }
 
@@ -21,10 +21,14 @@
 
 .error {
     color: #f24537;
-    font-family: 'Open Sans', 'Helvetica Neue', 'Segoe UI', 'Calibri', 'Arial', sans-serif;
+    /* font-family: 'Open Sans', 'Helvetica Neue', 'Segoe UI', 'Calibri', 'Arial', sans-serif; */
 }
 
 label {
+    user-select: none;
+}
+
+button {
     user-select: none;
 }
 
@@ -47,29 +51,37 @@ select {
 
 .genre-option {
     flex: 1 0 25%;
-    margin: 5px;
+    margin: 8px;
     height: 75px;
-    background-color: powderblue;
+    background-color: rgb(63, 139, 189);
     font-size: 1.8em;
-    border-radius: 3%;
+    border-radius: 30%;
     padding-top: 3%;
+    text-align: center;
+    font-family: 'Titan One', cursive;
+}
+
+.user-inputs {
+    border: 2px solid black;
 }
 
 .genre-option>input {
-    display: none;
+    opacity: 1%;
+    margin: 0;
 }
 
-.checked {
-    background-color: goldenrod;
+.gen-selected, .genre-option:focus-within {
+    background-image: linear-gradient(to top right, rgb(243, 111, 255), rgb(255, 229, 111));
+    color: black;
 }
 
-.genre-option:hover, .genre-option:active {
-    background-color: darkorchid;
+.genre-option:hover, .genre-option:focus-within {
+    box-shadow: 5px 10px rgb(253, 72, 141);
     cursor: pointer;
 }
 
-.option-text {
-    text-align: center
+.genre-option:focus-within, input[type="radio"]:checked+label {
+    background-color: goldenrod;
 }
 
 #create {
@@ -103,4 +115,17 @@ select {
 #create:active {
     position: relative;
     top: 1px;
+}
+
+@media only screen and (max-width: 850px) {
+    .genre-option {
+        flex: 1 0 33%;
+    }
+}
+
+@media only screen and (max-width:600px) {
+    .genre-option {
+        font-size: 1.1em;
+        height: 40px;
+    }
 }

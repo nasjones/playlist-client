@@ -1,0 +1,15 @@
+.list-item {
+    border: 2px solid white;
+    margin: 2%;
+    padding: 10px;
+    display: block;
+}
+
+.list-item:hover, .list-item:focus {
+    background-image: linear-gradient(to top right, rgb(111, 198, 255), pink);
+    color: black;
+}
+
+#play-listed {
+    display: block;
+}

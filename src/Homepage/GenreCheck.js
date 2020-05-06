@@ -1,32 +1,40 @@
 import React, { Component } from 'react'
 
 export default class genreChecks extends Component {
+
     constructor(props) {
         super(props);
-
         this.state = {
             id: props.id,
             name: props.name,
-            checked: false
         }
-        this.myRef = React.createRef();
     }
 
     toggleClick = (e) => {
-        this.props.clickE(e, this.state.checked)
-        this.setState({
-            id: this.state.id,
-            name: this.state.name,
-            checked: !this.state.checked
-        })
+        this.props.clickE(e, this.state.name)
     }
+
     render() {
-        return (
-            <label key={this.state.id} className={this.state.checked ? "genre-option checked" : "genre-option"} ref={this.myRef}>
-                <input type="checkbox" value={this.state.name} onClick={this.toggleClick} />
-                <span className="option-text">{this.state.name}</span>
-            </label>
-        )
+
+        if (this.props.selected === this.state.name)
+            return (
+                <label key={this.state.id} name={this.state.name} className="genre-option gen-selected" htmlFor={this.state.id} checked={this.state.selectedGen === this.state.name}>
+                    {this.state.name}
+
+                    <input type="radio" value={this.state.name} name="gen-option" id={this.state.id} />
+                </label>
+            )
+
+        else
+            return (
+
+                <label key={this.state.id} name={this.state.name} className="genre-option" htmlFor={this.state.id} checked={this.state.selectedGen === this.state.name}>
+                    {this.state.name}
+
+                    <input type="radio" value={this.state.name} name="gen-option" id={this.state.id} />
+                </label>
+
+            )
 
     }
 }

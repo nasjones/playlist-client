@@ -1,6 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Titan+One&display=swap');
+html {
+  background-image: radial-gradient(black, rgb(44, 44, 44));
+  color: white;
+}
+
 header {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  /* flex: 1; */
+}
+
+header>hr {
+  width: 100%;
+}
+
+#home-link:hover {
+  color: linear-gradient(to right, rgb(111, 198, 255), pink);
 }
 
 h1 {
@@ -16,4 +33,8 @@ h1 {
 
 #home-link {
   margin: 20px;
+}
+
+a, a:visited, a:hover, a:active {
+  color: white;
 }

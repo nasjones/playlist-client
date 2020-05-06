@@ -1,0 +1,43 @@
+.song-item {
+    /* border: 2px solid black; */
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 85%;
+    text-align: left;
+    padding: 10px;
+    /* display: flex;
+    flex-wrap: wrap; */
+    display: inline-block;
+    position: relative;
+}
+
+a:focus>.song-item, .song-item:hover {
+    background-image: linear-gradient(to top right, rgb(111, 198, 255), pink);
+    color: black;
+}
+
+.artist {
+    word-wrap: break-word;
+    display: inline-block;
+    max-width: 100%;
+    min-height: 2em;
+    word-break: break-all;
+}
+
+#time {
+    /* text-align: end; */
+    /* margin-left: auto; */
+    float: right;
+}
+
+.song-item>a {
+    color: black;
+    text-decoration: none;
+}
+
+@media only screen and (max-width: 750px) {
+    #time {
+        display: block;
+        float: none;
+    }
+}

@@ -5,9 +5,12 @@ import config from './config';
 import PlaylistContext from './PlaylistContext'
 import Landing from './Landingpage/Landing'
 import Homepage from './Homepage/Homepage'
-import test_genres from './test-genres'
+import PlaylistDisplay from './Playlists/Playlist-Display'
+import ExistingPlaylists from './Playlists/Existing-playlists'
+import NotFoundPage from './NotFoundPage'
 
 class App extends Component {
+
   state = {
     genres: [],
     playlists: [],
@@ -17,61 +20,60 @@ class App extends Component {
 
   setGenres = genres => {
     this.setState({
-      genres,
-      user: this.state.user,
-      error: this.state.error,
+      genres
     })
   }
 
   setPlaylists = playlists => {
     this.setState({
-      playlists,
-      user: this.state.user,
-      error: this.state.error,
+      playlists
     })
+  }
+
+  fetcher = () => {
+    console.log(config.REACT_APP_API_KEY)
+    let key = config.REACT_APP_API_KEY
+    let endpoint = config.ENDPOINT
+    Promise.all([
+      fetch(endpoint + '/playlists'),
+      fetch(endpoint + '/genres'),
+      fetch(endpoint + '/auth')
+    ],
+      {
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json',
+          'Authorization': `Bearer ${key}`
+        },
+      })
+      .then(([playlistRes, genreRes, authRes]) => {
+        if (!playlistRes.ok)
+          return playlistRes.json().then(error => Promise.reject(error))
+        if (!genreRes.ok)
+          return genreRes.json().then(error => Promise.reject(error))
+        if (!authRes.ok)
+          return authRes.json().then(error => Promise.reject(error))
+        return Promise.all([playlistRes.json(), genreRes.json(), authRes.json()])
+      })
+      .then(([playlist, genres, auth]) => {
+        this.setPlaylists(playlist)
+        this.setGenres(genres)
+        console.log(auth)
+      })
+      .catch(error => {
+        console.error({ error });
+      });
   }
 
   componentDidMount() {
-    // let endpoint = config.ENDPOINT
-    // Promise.all([
-    //   fetch(endpoint + '/playlists'),
-    //   fetch(endpoint + '/genres')
-    // ],
-    //   {
-    //     method: 'GET',
-    //     headers: {
-    //       'content-type': 'application/json',
-    //     },
-    //   })
-    //   .then(([playlistRes, genreRes]) => {
-    //     if (!playlistRes.ok)
-    //       return playlistRes.json().then(error => Promise.reject(error))
-    //     if (!genreRes.ok)
-    //       return genreRes.json().then(error => Promise.reject(error))
-    //     return Promise.all([playlistRes, genreRes.json()])
-    //   })
-    //   .then(([playlist, genres]) => {
-    //     this.setPlaylists(playlist)
-    //     this.setGenres(genres)
-    //   })
-    //   .catch(error => {
-    //     console.error({ error });
-    //     this.setState({ error })
-    //   });
-    this.setState({
-      genres: test_genres
-    })
-  }
-
-  pageUpdate = () => {
-    this.componentDidUpdate()
+    this.fetcher()
   }
 
   render() {
     const contextValue = {
       genres: this.state.genres,
       playlists: this.state.playlists,
-      pageUpdate: this.pageUpdate
+      pageUpdate: this.fetcher,
     }
 
     return (
@@ -87,9 +89,10 @@ class App extends Component {
             <Switch>
               <Route exact path='/' component={Landing} />
               <Route path='/homepage' component={Homepage} />
-              <Route path='/existing-playlists' component={Homepage} />
+              <Route path='/existing-playlists' component={ExistingPlaylists} />
+              <Route path='/playlist-display/:playlistId' component={PlaylistDisplay} />
+              <Route component={NotFoundPage} />
             </Switch>
-
           </main>
         </PlaylistContext.Provider>
       </div>

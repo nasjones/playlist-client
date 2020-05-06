@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import PlaylistContext from '../PlaylistContext'
 import './Homepage.css'
 import GenreCheck from './GenreCheck'
@@ -8,12 +8,14 @@ import config from '../config'
 
 
 export default class HomePage extends Component {
+    _isMounted = false;
     constructor(props) {
         super(props)
         this.state = {
             title: "",
             titleTouch: false,
-            selected: [],
+            selectedId: null,
+            selectedGen: null,
             genTouch: false,
             hour: null,
             hourTouch: false,
@@ -22,37 +24,29 @@ export default class HomePage extends Component {
         }
     }
 
-    clickStore = (e, status) => {
-        if (!status)
-            this.setState({
-                selected: [...this.state.selected, e.target.value],
-                genTouch: true
-            })
-        else {
-            let temp = this.state.selected.filter(item => {
-                if (item !== e.target.value)
-                    return item
-            })
-            this.setState({ selected: temp })
-        }
+    fieldChange = e => {
 
+        this.setState({
+            selectedId: e.target.id,
+            selectedGen: e.target.value
+        })
     }
 
-    titleChange = (e) => {
+    titleChange = e => {
         this.setState({
             title: e.target.value,
             titleTouch: true
         })
     }
 
-    minChange = (e) => {
+    minChange = e => {
         this.setState({
             min: parseInt(e.target.value),
             minTouch: true
         })
     }
 
-    hourChange = (e) => {
+    hourChange = e => {
         this.setState({
             hour: parseInt(e.target.value),
             hourTouch: true
@@ -82,9 +76,9 @@ export default class HomePage extends Component {
     }
 
     validateGenre = () => {
-        const genres = this.state.selected
-        if (genres.length === 0)
-            return "You must select at least one genre"
+        const genre = this.state.selectedId
+        if (genre === null)
+            return "You must select a genre."
     }
 
     validateTitle = () => {
@@ -98,17 +92,20 @@ export default class HomePage extends Component {
 
     subHandle = (e, value) => {
         e.preventDefault();
-        let time = (3600 * this.state.hour) + (60 * this.state.min)
+        let time = (3600000 * this.state.hour) + (60000 * this.state.min)
         let newPlaylist = {
             title: this.state.title.trim(),
             length: time,
+            genre_id: this.state.selectedId,
             author: 1
         }
+
 
         fetch(`${config.ENDPOINT}/playlists`, {
             method: 'POST',
             headers: {
-                'content-type': 'application/json'
+                'content-type': 'application/json',
+                'Authorization': `Bearer ${config.REACT_APP_API_KEY}`
             },
             body: JSON.stringify(newPlaylist),
         })
@@ -117,15 +114,27 @@ export default class HomePage extends Component {
                     return res.json().then(e => Promise.reject(e))
                 return res.json()
             })
-            .then((created) => {
-                fetch(`${config.ENDPOINT}/`)
-                // value.pageUpdate()
-                this.props.history.push('/homepage')
+            .then(res => {
 
+                value.pageUpdate()
+                this.props.history.push(`/playlist-display/${res.id}`,
+                    {
+                        genres: value.genres,
+                        time: time
+                    }
+                )
             })
             .catch(error => {
                 console.error({ error })
             })
+    }
+
+    componentDidMount() {
+        this._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     render() {
@@ -135,7 +144,7 @@ export default class HomePage extends Component {
                 {(value) => {
 
                     let genres = value.genres.map(genre =>
-                        <GenreCheck id={genre.id} name={genre.name} key={genre.id} clickE={this.clickStore} />
+                        <GenreCheck id={genre.id} name={genre.name} selected={this.state.selectedGen} key={genre.id} />
                     )
 
                     let minutes = this.minArr().map(min => {
@@ -152,8 +161,6 @@ export default class HomePage extends Component {
                     const timeError = this.validateTime()
                     const genreError = this.validateGenre()
                     const titleError = this.validateTitle()
-                    // let untouched = this.state.nameTouch && this.state.genTouch && this.state.hourTouch && this.state.minTouch
-
 
                     return genres && (
                         <div id="play-stage">
@@ -161,25 +168,25 @@ export default class HomePage extends Component {
                                 <div id="input-wrap">
                                     <div className="inputs">
                                         <label htmlFor="title-input">Playlist Name: </label>
-                                        <input type="text" id="title-input" onChange={this.titleChange} />
+                                        <input type="text" id="title-input" onChange={this.titleChange} className="user-inputs" />
                                         {this.state.titleTouch && <ValidationError message={titleError} />}
                                     </div>
                                     <div className="inputs">
                                         <label htmlFor="hour-length">Playlist length: </label>
-                                        <select onChange={this.hourChange}>
+                                        <select onChange={this.hourChange} className="user-inputs">
                                             <option value={null}>--Hour(s)--</option>
                                             {hours}
                                         </select>
                                     :
-                                    <select onChange={this.minChange}>
+                                    <select onChange={this.minChange} className="user-inputs">
                                             <option value={null}>--Minute(s)--</option>
                                             {minutes}
                                         </select>
                                         {(this.state.hourTouch && this.state.minTouch) && <ValidationError message={timeError} />}
                                     </div>
                                 </div>
-                                <fieldset >
-                                    <legend>Choose your genre(s)!</legend>
+                                <fieldset onChange={this.fieldChange}>
+                                    <legend>Choose your genre!</legend>
                                     {(this.state.genTouch && <ValidationError message={genreError} />)}
                                     <div id="genres">
                                         {genres}
@@ -187,6 +194,7 @@ export default class HomePage extends Component {
                                 </fieldset>
                                 <button type="submit" id="create" onClick={e => this.subHandle(e, value)} disabled={timeError || genreError || titleError}>Create your playlist!</button>
                             </form>
+                            <Link to={'/playlist-display/3'} >Here</Link>
                         </div>
                     )
                 }
