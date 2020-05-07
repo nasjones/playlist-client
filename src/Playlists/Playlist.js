@@ -46,7 +46,7 @@ export default class Playlist extends Component {
                 return res.json()
             })
             .then(playlist => {
-                console.log(playlist)
+
                 this.setPlaylist(playlist)
 
                 fetch(config.ENDPOINT + `/genres/${playlist.genre_id}`,
@@ -63,7 +63,7 @@ export default class Playlist extends Component {
                         return res2.json()
                     })
                     .then(genre => {
-                        console.log(genre)
+
                         let rand = Math.floor(Math.random() * 1950);
                         let queryString = 'genre:%20' + genre.name + '&type=track&limit=50&offset=' + rand
 
@@ -84,7 +84,7 @@ export default class Playlist extends Component {
                                     return res3.json().then(e => Promise.reject(e))
                                 return res3.json()
                             }).then(response => {
-                                console.log(response.tracks)
+
                                 let runtime = 0
                                 let chosen = []
 
@@ -129,7 +129,7 @@ export default class Playlist extends Component {
     }
 
     componentDidMount() {
-        console.log(this.state.playlistId)
+
         this._isMounted = true;
         if (this._isMounted) {
             this.fetcher()

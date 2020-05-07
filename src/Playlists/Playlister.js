@@ -6,7 +6,7 @@ import config from '../config'
 
 export default function Playlister(props) {
 
-    console.log(props)
+
     let time_convert = (length) => {
         var min = Math.floor((length / 60000) % 60)
         var hours = Math.floor((length / 3600000));

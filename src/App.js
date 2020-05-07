@@ -31,31 +31,14 @@ class App extends Component {
   }
 
   fetcher = () => {
-    console.log(config.REACT_APP_API_KEY)
-    let key = config.REACT_APP_API_KEY
     let endpoint = config.ENDPOINT
-
-    // Promise.all([
-    //   fetch(endpoint + '/playlists'),
-    //   fetch(endpoint + '/genres'),
-    //   fetch(endpoint + '/auth')
-    // ],
-    //   {
-    //     method: 'GET',
-    //     headers: {
-    //       'content-type': 'application/json',
-    //       'Authorization': `Bearer ${key}`
-    //     },
-    //   })
     const options = {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
-        'Authorization': `Bearer ${key}`
+        'Authorization': `Bearer ${config.REACT_APP_API_KEY}`
       }
     };
-    console.log(key);
-    console.log(options);
     Promise.all([
       fetch(endpoint + '/playlists', options),
       fetch(endpoint + '/genres', options),

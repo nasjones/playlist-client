@@ -7,9 +7,9 @@ import PlaylistDisplay from './Playlists/Playlist-Display'
 
 export default function Nav(props) {
 
-    console.log(props)
+
     let output = (value) => {
-        console.log(value.playlists)
+
         if (value.playlists.length > 10) {
             return value.playlists.slice(value.playlists.length - 11, value.playlists.length - 1).map(playlist => {
                 let genre = value.genres.find(genre => {
