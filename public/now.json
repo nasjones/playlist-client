@@ -1,0 +1,15 @@
+{
+    "version": 2,
+    "alias": "nas-showtunes-app",
+    "name": "Showtunes",
+    "routes": [
+        {
+            "src": "^/static/(.*)",
+            "dest": "/static/$1"
+        },
+        {
+            "src": ".*",
+            "dest": "/index.html"
+        }
+    ]
+}

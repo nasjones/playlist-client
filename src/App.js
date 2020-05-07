@@ -34,18 +34,33 @@ class App extends Component {
     console.log(config.REACT_APP_API_KEY)
     let key = config.REACT_APP_API_KEY
     let endpoint = config.ENDPOINT
+
+    // Promise.all([
+    //   fetch(endpoint + '/playlists'),
+    //   fetch(endpoint + '/genres'),
+    //   fetch(endpoint + '/auth')
+    // ],
+    //   {
+    //     method: 'GET',
+    //     headers: {
+    //       'content-type': 'application/json',
+    //       'Authorization': `Bearer ${key}`
+    //     },
+    //   })
+    const options = {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${key}`
+      }
+    };
+    console.log(key);
+    console.log(options);
     Promise.all([
-      fetch(endpoint + '/playlists'),
-      fetch(endpoint + '/genres'),
-      fetch(endpoint + '/auth')
-    ],
-      {
-        method: 'GET',
-        headers: {
-          'content-type': 'application/json',
-          'Authorization': `Bearer ${key}`
-        },
-      })
+      fetch(endpoint + '/playlists', options),
+      fetch(endpoint + '/genres', options),
+      fetch(endpoint + '/auth', options)
+    ])
       .then(([playlistRes, genreRes, authRes]) => {
         if (!playlistRes.ok)
           return playlistRes.json().then(error => Promise.reject(error))
