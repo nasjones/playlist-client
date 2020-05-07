@@ -194,7 +194,6 @@ export default class HomePage extends Component {
                                 </fieldset>
                                 <button type="submit" id="create" onClick={e => this.subHandle(e, value)} disabled={timeError || genreError || titleError}>Create your playlist!</button>
                             </form>
-                            <Link to={'/playlist-display/3'} >Here</Link>
                         </div>
                     )
                 }

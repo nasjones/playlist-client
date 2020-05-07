@@ -1,9 +1,9 @@
 import React from 'react'
-import { NavLink, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import './Nav.css'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import PlaylistContext from './PlaylistContext'
-import PlaylistDisplay from './Playlists/Playlist-Display'
+// import PlaylistDisplay from './Playlists/Playlist-Display'
 
 export default function Nav(props) {
 
