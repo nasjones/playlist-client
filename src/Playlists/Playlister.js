@@ -1,8 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import PlaylistContext from '../PlaylistContext'
-import PropTypes from 'prop-types'
-import config from '../config'
 
 export default function Playlister(props) {
 

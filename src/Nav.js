@@ -33,7 +33,7 @@ export default function Nav(props) {
                 })
 
                 return genre && (
-                    <Link key={playlist.id} to={`/playlist-display/${playlist.id}`} onClick={props.clicker} >
+                    <Link key={playlist.id} to={`/playlist-display/${playlist.id}`} onClick={e => { props.clicker(playlist.id) }} >
                         <article className="navLink">
                             <h3 id={playlist.id} >{playlist.title}</h3>
                             <span>Genre:{genre.name}</span>

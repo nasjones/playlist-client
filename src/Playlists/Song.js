@@ -1,9 +1,6 @@
 import React from 'react'
 import './Song.css'
-import { Link } from 'react-router-dom'
-import PlaylistContext from '../PlaylistContext'
-import PropTypes from 'prop-types'
-import config from '../config'
+
 
 export default function Song(props) {
 
@@ -18,7 +15,7 @@ export default function Song(props) {
     let artistOut = props.track.artist.join(', ')
     return (
 
-        <a target='_blank' href={props.track.url}>
+        <a target='_blank' href={props.track.url} rel="noopener noreferrer">
             <div className="song-item">
                 <h3>{props.track.title}</h3>
                 <span className="artist">by: {artistOut}</span>

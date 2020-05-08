@@ -1,11 +1,6 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import PlaylistContext from '../PlaylistContext'
-import PropTypes from 'prop-types'
 import config from '../config'
 import Song from './Song'
-import Nav from '../Nav'
-import { render } from '@testing-library/react'
 
 export default class Playlist extends Component {
     constructor(props) {

@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import { Link, withRouter } from 'react-router-dom'
-import PlaylistContext from '../PlaylistContext'
 import config from '../config'
 import Song from './Song'
 import Nav from '../Nav'
@@ -55,7 +53,7 @@ export default class PlaylistDisplay extends Component {
         })
     }
 
-    fetcher = () => {
+    fetcher = (playlistId) => {
 
         this.setState({
             playlist: null,
@@ -65,7 +63,8 @@ export default class PlaylistDisplay extends Component {
         this.setState({
             loaded: false
         })
-        let playlistId = this.props.match.params.playlistId
+        // let playlistId = this.props.match.params.playlistId
+        // console.log(playlistId);
         fetch(config.ENDPOINT + `/playlists/${playlistId}`,
             {
                 method: 'GET',
@@ -80,7 +79,7 @@ export default class PlaylistDisplay extends Component {
                 return res.json()
             })
             .then(playlist => {
-
+                console.log(playlist);
                 this.setPlaylist(playlist)
 
                 fetch(config.ENDPOINT + `/genres/${playlist.genre_id}`,
@@ -170,8 +169,9 @@ export default class PlaylistDisplay extends Component {
 
     componentDidMount() {
         this._isMounted = true;
+        let playlistId = this.props.match.params.playlistId
         if (this._isMounted) {
-            this.fetcher()
+            this.fetcher(playlistId)
         }
 
     }
