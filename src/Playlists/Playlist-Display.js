@@ -17,7 +17,8 @@ export default class PlaylistDisplay extends Component {
             playlist: null,
             songs: [],
             loaded: false,
-            error: null
+            error: null,
+            hidden: true
         }
     }
 
@@ -63,8 +64,7 @@ export default class PlaylistDisplay extends Component {
         this.setState({
             loaded: false
         })
-        // let playlistId = this.props.match.params.playlistId
-        // console.log(playlistId);
+
         fetch(config.ENDPOINT + `/playlists/${playlistId}`,
             {
                 method: 'GET',
@@ -173,25 +173,60 @@ export default class PlaylistDisplay extends Component {
         if (this._isMounted) {
             this.fetcher(playlistId)
         }
+        window.addEventListener("resize", this.resize.bind(this));
+        this.resize();
+
+    }
+
+    resize() {
+        let display = (window.innerWidth >= 850);
+        if (display) {
+            this.setState({ hidden: false });
+        }
+        else {
+            this.setState({ hidden: true });
+        }
 
     }
 
     render() {
         if ((!this.state.loaded) && (this.state.error === null)) return <h1>Loading..</h1>;
 
-        if (this.state.error === true) return <h1 className="error">Sorry there was an error with this request. Maybe try again later or try something else.</h1>
+        if (this.state.error === true) return <div><h1 className="error">Sorry there was an error with this request. Maybe try again later or try something else.</h1><a href="/">Return home</a></div>
 
         let songDisplay = this.state.songs.map(song => {
             return <Song track={song} key={song.id} />
         })
+        if (!this.state.hidden || window.innerWidth >= 850) {
+            return (
+
+                <div id="playlistDisplay">
+                    <input type="image" id="ham" src={require('../cross.png')} alt="ham-icon" onClick={e => {
+                        this.setState({
+                            hidden: !this.state.hidden
+                        })
+                    }} />
+                    <div id="nav">
+                        <Nav clicker={this.fetcher} />
+                    </div>
+                    <div id="playlistContent">
+                        <h2 id="playlist-title">{this.state.playlist.title}</h2>
+                        <h3>{this.state.genreName}</h3>
+                        {songDisplay}
+
+                    </div>
+                </div>
+            )
+        }
         return (
 
             <div id="playlistDisplay">
-                <div id="nav">
-                    <Nav clicker={this.fetcher} />
-                </div>
+                <input type="image" id="ham" src={require('../Ham.png')} alt="ham-icon" onClick={e => {
+                    this.setState({
+                        hidden: !this.state.hidden
+                    })
+                }} />
                 <div id="playlistContent">
-
                     <h2 id="playlist-title">{this.state.playlist.title}</h2>
                     <h3>{this.state.genreName}</h3>
                     {songDisplay}

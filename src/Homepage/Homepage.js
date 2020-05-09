@@ -173,12 +173,12 @@ export default class HomePage extends Component {
                                     <div className="inputs">
                                         <label htmlFor="hour-length">Playlist length: </label>
                                         <select onChange={this.hourChange} className="user-inputs">
-                                            <option value={null}>--Hour(s)--</option>
+                                            <option value={null}>Hr(s)</option>
                                             {hours}
                                         </select>
                                     :
                                     <select onChange={this.minChange} className="user-inputs">
-                                            <option value={null}>--Minute(s)--</option>
+                                            <option value={null}>Min(s)</option>
                                             {minutes}
                                         </select>
                                         {(this.state.hourTouch && this.state.minTouch) && <ValidationError message={timeError} />}

@@ -1,13 +1,17 @@
-/* @import url("https://fonts.googleapis.com/css2?family=Monoton&display=swap"); */
-
 #user-prompt {
     text-align: center;
     border: 3px solid white;
-    margin: 0% 25%;
+    margin: 0% 20%;
     padding: 5px;
 }
 
 #user-prompt>a {
     margin-left: 10px;
     margin-right: 10px;
+}
+
+@media only screen and(min-width:850px) {
+    #user-prompt {
+        margin: 0% 25%;
+    }
 }

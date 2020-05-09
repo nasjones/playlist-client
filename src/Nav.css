@@ -1,38 +1,43 @@
-.active>h2 {
-    background-color: orange;
-}
-
 .navLink {
-    border: 1px solid black;
+    border: 1px solid;
     border-right: none;
     margin: 0px;
     padding: 20px 60px;
 }
 
-.addFolder {
-    border: 1px solid black;
-    margin: 0px;
-    padding: 20px 60px;
-    margin: 8px;
-}
-
-.navLink:hover, .addFolder:hover, a:focus>article {
+.navLink:hover, a:focus>article {
     background-image: linear-gradient(to top right, rgb(111, 198, 255), pink);
     color: black;
 }
 
 #navBar {
     height: inherit;
+    border: 2px solid white;
+    background: radial-gradient(black, rgb(63, 63, 63));
+}
+
+#inverted {
+    filter: invert(50%);
 }
 
 #recent {
     font-family: 'Bungee Shade', cursive;
-}
-
-#b0715efe-ffaf-11e8-8eb2-f2801f1b9fd1 {
-    margin-top: 20px;
+    text-align: center;
 }
 
 #nav {
-    border-right: 2px solid white;
+    position: absolute;
+    z-index: 1;
+    background-color: radial-gradient(black, rgb(44, 44, 44));
+    margin-top: 9%;
+    height: inherit;
+}
+
+@media only screen and (min-width:850px) {
+    #nav {
+        position: inherit;
+        z-index: 0;
+        margin-top: 0%;
+        border: 1px solid white;
+    }
 }

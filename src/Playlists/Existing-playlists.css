@@ -12,4 +12,20 @@
 
 #play-listed {
     display: block;
+    font-size: x-large;
+}
+
+#existing-display {
+    text-align: center;
+    margin: 1% 10%;
+}
+
+@media only screen and (min-width:800px) {
+    #play-listed {
+        text-align: center;
+        margin: 1% 10%;
+    }
+    .list-item>h2 {
+        margin-top: 0px;
+    }
 }

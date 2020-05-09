@@ -36,7 +36,7 @@ export default function Nav(props) {
                     <Link key={playlist.id} to={`/playlist-display/${playlist.id}`} onClick={e => { props.clicker(playlist.id) }} >
                         <article className="navLink">
                             <h3 id={playlist.id} >{playlist.title}</h3>
-                            <span>Genre:{genre.name}</span>
+                            <span>Genre: {genre.name}</span>
                         </article>
                     </Link>
                 )
@@ -55,6 +55,11 @@ export default function Nav(props) {
                         <Link to={'/existing-playlists'}>
                             <article className="navLink">
                                 <h3>See More!</h3>
+                            </article>
+                        </Link>
+                        <Link to={'/homepage'}  >
+                            <article className="navLink">
+                                <h3>Create a playlist</h3>
                             </article>
                         </Link>
                     </div>
