@@ -7,7 +7,7 @@ import config from '../config'
 
 
 export default class HomePage extends Component {
-    _isMounted = false;
+
     constructor(props) {
         super(props)
         this.state = {
@@ -16,10 +16,11 @@ export default class HomePage extends Component {
             selectedId: null,
             selectedGen: null,
             genTouch: false,
-            hour: null,
-            hourTouch: false,
-            min: null,
-            minTouch: false,
+            hour: NaN,
+            timeTouch: false,
+            min: NaN,
+            windowHeight: 0,
+            scrollErr: false
         }
     }
 
@@ -41,14 +42,14 @@ export default class HomePage extends Component {
     minChange = e => {
         this.setState({
             min: parseInt(e.target.value),
-            minTouch: true
+            timeTouch: true
         })
     }
 
     hourChange = e => {
         this.setState({
             hour: parseInt(e.target.value),
-            hourTouch: true
+            timeTouch: true
         })
     }
 
@@ -61,7 +62,7 @@ export default class HomePage extends Component {
     }
 
     hourArr = () => {
-        let arr = new Array(4);
+        let arr = new Array(2);
         for (let i = 0; i <= 2; i++)
             arr[i] = i
         return arr
@@ -70,8 +71,8 @@ export default class HomePage extends Component {
     validateTime = () => {
         const hourSelect = this.state.hour
         const minSelect = this.state.min
-        if ((hourSelect === null) || (minSelect === null) || isNaN(hourSelect) || isNaN(minSelect) || (hourSelect === 0 && minSelect === 0))
-            return "Select a valid time"
+        if ((isNaN(hourSelect) && isNaN(minSelect)) || (isNaN(hourSelect) && (minSelect === 0)) || (isNaN(minSelect) && (hourSelect === 0)))
+            return "Select a valid time."
     }
 
     validateGenre = () => {
@@ -91,14 +92,13 @@ export default class HomePage extends Component {
 
     subHandle = (e, value) => {
         e.preventDefault();
-        let time = (3600000 * this.state.hour) + (60000 * this.state.min)
+        let time = (3600000 * (this.state.hour) || 0) + (60000 * (this.state.min || 0))
         let newPlaylist = {
             title: this.state.title.trim(),
             length: time,
             genre_id: this.state.selectedId,
             author: 1
         }
-
 
         fetch(`${config.ENDPOINT}/playlists`, {
             method: 'POST',
@@ -128,23 +128,58 @@ export default class HomePage extends Component {
             })
     }
 
+    goLand = (e) => {
+        e.preventDefault()
+        this.props.history.push('/')
+    }
+
     componentDidMount() {
-        this._isMounted = true;
+        window.addEventListener('scroll', this.handleScroll);
     }
 
     componentWillUnmount() {
-        this._isMounted = false;
+        window.removeEventListener('scroll', this.handleScroll);
+    }
+
+    handleScroll = (e) => {
+        this.setState({
+            windowHeight: window.pageYOffset
+        });
+        this.errActivate()
+    }
+
+    errActivate = () => {
+        if (window.innerWidth < 450) {
+            if (this.state.windowHeight >= (window.innerHeight / 3)) {
+                this.setState({
+                    titleTouch: true,
+                    timeTouch: true,
+                    // minTouch: true,
+                    genTouch: true
+                })
+            }
+        }
+        else
+            if (this.state.windowHeight >= (window.innerHeight / 2)) {
+                this.setState({
+                    titleTouch: true,
+                    timeTouch: true,
+                    // minTouch: true,
+                    genTouch: true
+                })
+            }
     }
 
     render() {
-
         return (
             <PlaylistContext.Consumer>
                 {(value) => {
-
                     let genres = value.genres.map(genre =>
                         <GenreCheck id={genre.id} name={genre.name} selected={this.state.selectedGen} key={genre.id} />
                     )
+
+                    if (genres.length === 0)
+                        return (<div id="play-stage"><h1>Loading</h1></div>)
 
                     let minutes = this.minArr().map(min => {
                         if (min < 10)
@@ -181,7 +216,7 @@ export default class HomePage extends Component {
                                             <option value={null}>Min(s)</option>
                                             {minutes}
                                         </select>
-                                        {(this.state.hourTouch && this.state.minTouch) && <ValidationError message={timeError} />}
+                                        {this.state.timeTouch && <ValidationError message={timeError} />}
                                     </div>
                                 </div>
                                 <fieldset onChange={this.fieldChange}>
@@ -191,7 +226,10 @@ export default class HomePage extends Component {
                                         {genres}
                                     </div>
                                 </fieldset>
-                                <button type="submit" id="create" onClick={e => this.subHandle(e, value)} disabled={timeError || genreError || titleError}>Create your playlist!</button>
+                                <div id="button-wrap">
+                                    <button type="submit" id="create" onClick={e => this.subHandle(e, value)} disabled={timeError || genreError || titleError}>Create your playlist!</button>
+                                    <button id="create" onClick={e => this.goLand(e)}>Return Home</button>
+                                </div>
                             </form>
                         </div>
                     )

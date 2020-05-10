@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Playlister from './Playlister'
 import PlaylistContext from '../PlaylistContext'
 import './Existing-playlists.css'
+import Nav from '../Nav'
 
 
 export default class ExistingPlaylist extends Component {
@@ -15,7 +16,6 @@ export default class ExistingPlaylist extends Component {
     }
 
     lister = (value) => {
-
         let temp
         if (this.state.genreId === "All") {
             temp = value.playlists.map(playlist => {
@@ -67,23 +67,30 @@ export default class ExistingPlaylist extends Component {
                     if ((output.length === 0) && (this.state.genreId !== "All"))
                         return (
                             <div id="existing-display">
-                                <select onChange={e => this.genChange(e.target.value)}>
-                                    <option value={null}>All</option>
-                                    {select}
-                                </select>
-                                <h2>Sorry no playlists of this genre are currently available <a href='/homepage'>Create one</a> or select a different genre.</h2>
-
+                                <Nav />
+                                <div id="lister">
+                                    <label htmlFor="genSelect">Genre Filter: </label>
+                                    <select onChange={e => this.genChange(e.target.value)} id="genSelect">
+                                        <option value={null}>All</option>
+                                        {select}
+                                    </select>
+                                    <h2>Sorry no playlists of this genre are currently available <a href='/homepage'>Create one</a> or select a different genre.</h2>
+                                </div>
                             </div>
                         )
 
                     return (
                         <div id="existing-display">
-                            <select onChange={e => this.genChange(e.target.value)}>
-                                <option value={null}>All</option>
-                                {select}
-                            </select>
-                            <div id="play-listed">
-                                {output}
+                            <Nav />
+                            <div id="lister">
+                                <label htmlFor="genSelect">Genre Filter: </label>
+                                <select onChange={e => this.genChange(e.target.value)} id="genSelect">
+                                    <option value={null}>All</option>
+                                    {select}
+                                </select>
+                                <div id="play-listed">
+                                    {output}
+                                </div>
                             </div>
                         </div>
                     )

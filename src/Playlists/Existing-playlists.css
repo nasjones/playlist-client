@@ -17,7 +17,17 @@
 
 #existing-display {
     text-align: center;
-    margin: 1% 10%;
+    display: flex;
+}
+
+#lister {
+    flex: 1;
+    margin-top: 15px;
+    padding: 5px;
+}
+
+#genSelect {
+    border: 2px solid black;
 }
 
 @media only screen and (min-width:800px) {

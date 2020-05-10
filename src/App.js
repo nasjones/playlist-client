@@ -56,7 +56,6 @@ class App extends Component {
       .then(([playlist, genres, auth]) => {
         this.setPlaylists(playlist)
         this.setGenres(genres)
-        console.log(auth)
       })
       .catch(error => {
         console.error({ error });

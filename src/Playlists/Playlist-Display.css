@@ -13,16 +13,7 @@
     font-family: 'Bungee Shade', cursive;
 }
 
-#ham {
-    width: 6%;
-    position: absolute;
-    z-index: 2;
-}
-
 @media only screen and (min-width:850px) {
-    #ham {
-        display: none;
-    }
     #playlistContent {
         position: inherit;
     }
