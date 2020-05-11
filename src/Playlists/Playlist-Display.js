@@ -163,7 +163,6 @@ export default class PlaylistDisplay extends Component {
                 console.error({ error });
                 this.setErrorTrue()
             });
-        // this.forceUpdate();
     }
 
     componentDidMount() {
@@ -196,18 +195,11 @@ export default class PlaylistDisplay extends Component {
         let songDisplay = this.state.songs.map(song => {
             return <Song track={song} key={song.id} />
         })
-        // if (!this.state.hidden || window.innerWidth >= 850) {
+
         return (
 
             <div id="playlistDisplay">
-                {/* <input type="image" id="ham" src={require('../cross.png')} alt="ham-icon" onClick={e => {
-                        this.setState({
-                            hidden: !this.state.hidden
-                        })
-                    }} /> */}
-                {/* <div id="nav"> */}
                 <Nav clicker={this.fetcher} />
-                {/* </div> */}
                 <div id="playlistContent">
                     <h2 id="playlist-title">{this.state.playlist.title}</h2>
                     <h3>{this.state.genreName}</h3>
@@ -216,22 +208,6 @@ export default class PlaylistDisplay extends Component {
                 </div>
             </div>
         )
-        // }
-        // return (
-        //     <div id="playlistDisplay">
-        //         <input type="image" id="ham" src={require('../Ham.png')} alt="ham-icon" onClick={e => {
-        //             this.setState({
-        //                 hidden: !this.state.hidden
-        //             })
-        //         }} />
-        //         <div id="playlistContent">
-        //             <h2 id="playlist-title">{this.state.playlist.title}</h2>
-        //             <h3>{this.state.genreName}</h3>
-        //             {songDisplay}
-
-        //         </div>
-        //     </div>
-        // )
 
     }
 }

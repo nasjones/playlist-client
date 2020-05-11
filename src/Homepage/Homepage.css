@@ -51,14 +51,13 @@ select {
     background-color: rgb(63, 139, 189);
     font-size: 1.8em;
     border-radius: 30%;
-    padding-top: 3%;
+    padding-top: 5%;
     text-align: center;
     font-family: 'Titan One', cursive;
 }
 
 .user-inputs {
     border: 2px solid black;
-    /* width: 20%; */
 }
 
 .genre-option>input {
@@ -76,15 +75,10 @@ select {
     cursor: pointer;
 }
 
-.genre-option:focus-within, input[type="radio"]:checked+label {
-    background-color: goldenrod;
-}
-
 #create {
     box-shadow: inset 0px -3px 7px 0px #29bbff;
-    background: linear-gradient(to bottom, #2dabf9 5%, #0688fa 100%);
-    background-color: #2dabf9;
-    border-radius: 3px;
+    border-radius: 20%;
+    background-color: rgb(63, 139, 189);
     border: 1px solid #0b0e07;
     display: inline-block;
     cursor: pointer;
@@ -98,8 +92,7 @@ select {
 }
 
 #create:hover {
-    background: linear-gradient(to bottom, #c62d1f 5%, #f24537 100%);
-    background-color: #c62d1f;
+    box-shadow: 5px 5px rgb(253, 72, 141);
 }
 
 #create:disabled {
@@ -118,16 +111,25 @@ select {
     display: inline-grid;
 }
 
+fieldset {
+    padding: 1%;
+}
+
 @media only screen and (max-width:600px) {
     .genre-option {
-        font-size: 1.1em;
+        font-size: 1em;
         height: 40px;
+        padding-left: 5%;
     }
 }
 
 @media only screen and (min-width:850px) {
+    fieldset {
+        margin: 1% 10%;
+    }
     .genre-option {
         flex: 1 0 25%;
+        padding-top: 3%;
     }
     #input-wrap {
         display: flex;

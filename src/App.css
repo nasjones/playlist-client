@@ -9,7 +9,6 @@ header {
   text-align: center;
   display: flex;
   flex-direction: column;
-  /* flex: 1; */
 }
 
 header>hr {
@@ -26,7 +25,6 @@ h1 {
 }
 
 .App {
-  /* background-image: url(./background.jpg); */
   background-size: auto;
   height: inherit;
 }

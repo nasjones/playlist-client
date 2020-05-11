@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import './Nav.css'
-// import PropTypes from 'prop-types'
 import PlaylistContext from './PlaylistContext'
-// import PlaylistDisplay from './Playlists/Playlist-Display'
 
 export default class Nav extends Component {
 

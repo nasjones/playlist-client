@@ -154,7 +154,6 @@ export default class HomePage extends Component {
                 this.setState({
                     titleTouch: true,
                     timeTouch: true,
-                    // minTouch: true,
                     genTouch: true
                 })
             }
@@ -164,7 +163,6 @@ export default class HomePage extends Component {
                 this.setState({
                     titleTouch: true,
                     timeTouch: true,
-                    // minTouch: true,
                     genTouch: true
                 })
             }
