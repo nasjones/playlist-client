@@ -57,7 +57,6 @@ export default class HomePage extends Component {
         let arr = new Array(60);
         for (let i = 0; i <= 59; i++)
             arr[i] = i
-
         return arr
     }
 
@@ -71,7 +70,7 @@ export default class HomePage extends Component {
     validateTime = () => {
         const hourSelect = this.state.hour
         const minSelect = this.state.min
-        if ((isNaN(hourSelect) && isNaN(minSelect)) || (isNaN(hourSelect) && (minSelect === 0)) || (isNaN(minSelect) && (hourSelect === 0)))
+        if ((isNaN(hourSelect) && isNaN(minSelect)) || (isNaN(hourSelect) && (minSelect === 0)) || (isNaN(minSelect) && (hourSelect === 0)) || ((minSelect === 0) && (hourSelect === 0)))
             return "Select a valid time."
     }
 

@@ -27,6 +27,7 @@ h1 {
 .App {
   background-size: auto;
   height: inherit;
+  font-size: large;
 }
 
 #home-link {

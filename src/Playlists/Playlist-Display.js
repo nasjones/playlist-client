@@ -55,7 +55,6 @@ export default class PlaylistDisplay extends Component {
     }
 
     fetcher = (playlistId) => {
-
         this.setState({
             playlist: null,
             songs: []
@@ -64,7 +63,7 @@ export default class PlaylistDisplay extends Component {
         this.setState({
             loaded: false
         })
-
+        //this makes the first get request to the playlist endpoint to get the playlist information
         fetch(config.ENDPOINT + `/playlists/${playlistId}`,
             {
                 method: 'GET',
@@ -80,7 +79,7 @@ export default class PlaylistDisplay extends Component {
             })
             .then(playlist => {
                 this.setPlaylist(playlist)
-
+                //this is the second get request to get the genre information
                 fetch(config.ENDPOINT + `/genres/${playlist.genre_id}`,
                     {
                         method: 'GET',
@@ -97,13 +96,14 @@ export default class PlaylistDisplay extends Component {
                     .then(genre => {
 
                         this.setGenre(genre)
+                        //this rand value is made to offset the songs chosen to keep them random
                         let rand = Math.floor(Math.random() * 1950);
                         let queryString = 'genre:%20' + genre.name + '&type=track&limit=50&offset=' + rand
 
                         let fetData = {
                             qString: queryString,
                         }
-
+                        //this post request is what is made to the spotify api with the genre information
                         fetch(`${config.ENDPOINT}/data`, {
                             method: 'POST',
                             headers: {
@@ -120,9 +120,8 @@ export default class PlaylistDisplay extends Component {
 
                                 let runtime = 0
                                 let chosen = []
-
+                                //this adds songs to the playlist until the runtime criteria is met
                                 while (runtime < playlist.length) {
-
                                     let trackChoice = Math.floor(Math.random() * 50);
 
                                     if (!chosen.includes(trackChoice)) {
