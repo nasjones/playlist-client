@@ -30,6 +30,10 @@ h1 {
   font-size: large;
 }
 
+.loading {
+  text-align: center;
+}
+
 #home-link {
   margin: 20px;
 }

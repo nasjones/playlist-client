@@ -94,7 +94,6 @@ export default class PlaylistDisplay extends Component {
                         return res2.json()
                     })
                     .then(genre => {
-
                         this.setGenre(genre)
                         //this rand value is made to offset the songs chosen to keep them random
                         let rand = Math.floor(Math.random() * 1950);
@@ -187,9 +186,14 @@ export default class PlaylistDisplay extends Component {
     }
 
     render() {
-        if ((!this.state.loaded) && (this.state.error === null)) return <h1>Loading..</h1>;
+        if ((!this.state.loaded) && (this.state.error === null)) return <h1 className="loading">Loading..</h1>;
 
-        if (this.state.error === true) return <div><h1 className="error">Sorry there was an error with this request. Maybe try again later or try something else.</h1><a href="/">Return home</a></div>
+        if (this.state.error === true) return (
+            <div>
+                <h1 className="error">Sorry there was an error with this request. Maybe try again later or try something else.</h1>
+                <a href="/">Return home</a>
+            </div>
+        )
 
         let songDisplay = this.state.songs.map(song => {
             return <Song track={song} key={song.id} />

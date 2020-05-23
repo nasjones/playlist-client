@@ -16,6 +16,7 @@ class App extends Component {
     playlists: [],
     user: null,
     error: null,
+    loaded: null
   }
 
   setGenres = genres => {
@@ -27,6 +28,12 @@ class App extends Component {
   setPlaylists = playlists => {
     this.setState({
       playlists
+    })
+  }
+
+  setLoaded() {
+    this.setState({
+      loaded: true
     })
   }
 
@@ -56,6 +63,7 @@ class App extends Component {
       .then(([playlist, genres, auth]) => {
         this.setPlaylists(playlist)
         this.setGenres(genres)
+        this.setLoaded()
       })
       .catch(error => {
         console.error({ error });
@@ -71,6 +79,7 @@ class App extends Component {
       genres: this.state.genres,
       playlists: this.state.playlists,
       pageUpdate: this.fetcher,
+      loaded: this.state.loaded
     }
 
     return (

@@ -62,6 +62,8 @@ export default class ExistingPlaylist extends Component {
                         return <option id={genre.id} key={genre.id} value={genre.id}>{genre.name}</option>
                     })
 
+                    if (!value.loaded) return <h1 className="loading">Loading..</h1>;
+
                     if ((output.length === 0) && (this.state.genreId === "All")) return (<div className="error">Sorry no playlists at the moment! <a href="/homepage">Create one.</a></div>)
 
                     if ((output.length === 0) && (this.state.genreId !== "All"))

@@ -176,7 +176,7 @@ export default class HomePage extends Component {
                     )
 
                     if (genres.length === 0)
-                        return (<div id="play-stage"><h1>Loading</h1></div>)
+                        return (<h1 className="loading">Loading</h1>)
 
                     let minutes = this.minArr().map(min => {
                         if (min < 10)

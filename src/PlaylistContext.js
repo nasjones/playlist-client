@@ -3,5 +3,6 @@ const PlaylistContext = React.createContext({
     genres: [],
     playlists: [],
     pageUpdate: () => { },
+    loaded: null
 })
 export default PlaylistContext
