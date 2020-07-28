@@ -25,7 +25,6 @@ export default class HomePage extends Component {
     }
 
     fieldChange = e => {
-
         this.setState({
             selectedId: e.target.id,
             selectedGen: e.target.value

@@ -1,6 +1,6 @@
 ## Name: Showtunes
 
-### Link: [https://showtunes-app.now.sh/](https://showtunes-app.now.sh/)
+### Link: [https://showtunes.vercel.app/](https://showtunes.vercel.app/)
 
 ### Api:
 - my api has 4 endpoints that the user interacts with directly: genres , playlists, auth, and data
