@@ -38,6 +38,7 @@ class App extends Component {
 
 	fetcher = () => {
 		let endpoint = config.ENDPOINT;
+		console.log(config);
 		const options = {
 			method: "GET",
 			headers: {
