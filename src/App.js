@@ -37,6 +37,7 @@ class App extends Component {
 	}
 
 	fetcher = () => {
+		console.log(process.env.TEST);
 		let endpoint = config.ENDPOINT;
 		const options = {
 			method: "GET",
