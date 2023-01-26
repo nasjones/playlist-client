@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Link, Switch } from "react-router-dom";
+import { Route, Link, Routes } from "react-router-dom";
 import "./App.css";
 import config from "./config";
 import PlaylistContext from "./PlaylistContext";
@@ -53,17 +53,11 @@ class App extends Component {
 		])
 			.then(([playlistRes, genreRes, authRes]) => {
 				if (!playlistRes.ok)
-					return playlistRes
-						.json()
-						.then((error) => Promise.reject(error));
+					return playlistRes.json().then((error) => Promise.reject(error));
 				if (!genreRes.ok)
-					return genreRes
-						.json()
-						.then((error) => Promise.reject(error));
+					return genreRes.json().then((error) => Promise.reject(error));
 				if (!authRes.ok)
-					return authRes
-						.json()
-						.then((error) => Promise.reject(error));
+					return authRes.json().then((error) => Promise.reject(error));
 				return Promise.all([
 					playlistRes.json(),
 					genreRes.json(),
@@ -102,19 +96,16 @@ class App extends Component {
 				</header>
 				<PlaylistContext.Provider value={contextValue}>
 					<main id="stage">
-						<Switch>
-							<Route exact path="/" component={Landing} />
-							<Route path="/homepage" component={Homepage} />
-							<Route
-								path="/existing-playlists"
-								component={ExistingPlaylists}
-							/>
+						<Routes>
+							<Route exact path="/" element={<Landing />} />
+							<Route path="/homepage" component={<Homepage />} />
+							<Route path="/existing-playlists" component={ExistingPlaylists} />
 							<Route
 								path="/playlist-display/:playlistId"
-								component={PlaylistDisplay}
+								component={<PlaylistDisplay />}
 							/>
-							<Route component={NotFoundPage} />
-						</Switch>
+							<Route component={<NotFoundPage />} />
+						</Routes>
 					</main>
 				</PlaylistContext.Provider>
 			</div>
