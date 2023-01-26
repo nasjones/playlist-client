@@ -1,70 +1,85 @@
-import React, { Component } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PlaylistContext from "../PlaylistContext";
 import "./Homepage.css";
 import GenreCheck from "./GenreCheck";
 import ValidationError from "../ValidationError";
 import config from "../config";
+import { useNavigate } from "react-router-dom";
 
-export default class HomePage extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			title: "",
-			titleTouch: false,
-			selectedId: null,
-			selectedGen: null,
-			genTouch: false,
-			hour: NaN,
-			timeTouch: false,
-			min: NaN,
-			windowHeight: 0,
-			scrollErr: false,
-		};
-	}
+export default function HomePage() {
+	const [homeState, setHomeState] = useState({
+		title: "",
+		titleTouch: false,
+		selectedId: null,
+		selectedGen: null,
+		genTouch: false,
+		hour: NaN,
+		timeTouch: false,
+		min: NaN,
+		windowHeight: 0,
+		scrollErr: false,
+	});
+	const navigate = useNavigate();
 
-	fieldChange = (e) => {
-		this.setState({
-			selectedId: e.target.id,
-			selectedGen: e.target.value,
-		});
-	};
+	const fieldChange = useCallback(
+		(e) => {
+			setHomeState({
+				...homeState,
+				selectedId: e.target.id,
+				selectedGen: e.target.value,
+			});
+		},
+		[homeState]
+	);
 
-	titleChange = (e) => {
-		this.setState({
-			title: e.target.value,
-			titleTouch: true,
-		});
-	};
+	const titleChange = useCallback(
+		(e) => {
+			setHomeState({
+				...homeState,
+				title: e.target.value,
+				titleTouch: true,
+			});
+		},
+		[homeState]
+	);
 
-	minChange = (e) => {
-		this.setState({
-			min: parseInt(e.target.value),
-			timeTouch: true,
-		});
-	};
+	const minChange = useCallback(
+		(e) => {
+			setHomeState({
+				...homeState,
+				min: parseInt(e.target.value),
+				timeTouch: true,
+			});
+		},
+		[homeState]
+	);
 
-	hourChange = (e) => {
-		this.setState({
-			hour: parseInt(e.target.value),
-			timeTouch: true,
-		});
-	};
+	const hourChange = useCallback(
+		(e) => {
+			setHomeState({
+				...homeState,
+				hour: parseInt(e.target.value),
+				timeTouch: true,
+			});
+		},
+		[homeState]
+	);
 
-	minArr = () => {
+	const minArr = useCallback(() => {
 		let arr = new Array(60);
 		for (let i = 0; i <= 59; i++) arr[i] = i;
 		return arr;
-	};
+	}, []);
 
-	hourArr = () => {
+	const hourArr = useCallback(() => {
 		let arr = new Array(2);
 		for (let i = 0; i <= 2; i++) arr[i] = i;
 		return arr;
-	};
+	}, []);
 
-	validateTime = () => {
-		const hourSelect = this.state.hour;
-		const minSelect = this.state.min;
+	const validateTime = useCallback(() => {
+		const hourSelect = homeState.hour;
+		const minSelect = homeState.min;
 		if (
 			(isNaN(hourSelect) && isNaN(minSelect)) ||
 			(isNaN(hourSelect) && minSelect === 0) ||
@@ -72,226 +87,207 @@ export default class HomePage extends Component {
 			(minSelect === 0 && hourSelect === 0)
 		)
 			return "Select a valid time.";
-	};
+	}, [homeState.hour, homeState.min]);
 
-	validateGenre = () => {
-		const genre = this.state.selectedId;
+	const validateGenre = useCallback(() => {
+		const genre = homeState.selectedId;
 		if (genre === null) return "You must select a genre.";
-	};
+	}, [homeState.selectedId]);
 
-	validateTitle = () => {
-		const titleInput = this.state.title.trim();
+	const validateTitle = useCallback(() => {
+		const titleInput = homeState.title.trim();
 		if (titleInput.length === 0) {
 			return "Title is required.";
 		} else if (titleInput.length < 3) {
 			return "Title must be atleast 3 characters long.";
 		}
-	};
+	}, [homeState.title]);
 
-	subHandle = (e, value) => {
-		e.preventDefault();
-		let time =
-			(3600000 * this.state.hour || 0) + 60000 * (this.state.min || 0);
-		let newPlaylist = {
-			title: this.state.title.trim(),
-			length: time,
-			genre_id: this.state.selectedId,
-			author: 1,
-		};
+	const subHandle = useCallback(
+		(e, value) => {
+			e.preventDefault();
+			let time = (3600000 * homeState.hour || 0) + 60000 * (homeState.min || 0);
+			let newPlaylist = {
+				title: homeState.title.trim(),
+				length: time,
+				genre_id: homeState.selectedId,
+				author: 1,
+			};
 
-		fetch(`${config.ENDPOINT}/playlists`, {
-			method: "POST",
-			headers: {
-				"content-type": "application/json",
-				Authorization: `Bearer ${config.API_KEY}`,
-			},
-			body: JSON.stringify(newPlaylist),
-		})
-			.then((res) => {
-				if (!res.ok) return res.json().then((e) => Promise.reject(e));
-				return res.json();
+			fetch(`${config.ENDPOINT}/playlists`, {
+				method: "POST",
+				headers: {
+					"content-type": "application/json",
+					Authorization: `Bearer ${config.API_KEY}`,
+				},
+				body: JSON.stringify(newPlaylist),
 			})
-			.then((res) => {
-				value.pageUpdate();
-				this.props.history.push(`/playlist-display/${res.id}`, {
-					genres: value.genres,
-					time: time,
+				.then((res) => {
+					if (!res.ok) return res.json().then((e) => Promise.reject(e));
+					return res.json();
+				})
+				.then((res) => {
+					value.pageUpdate();
+					navigate(`/playlist-display/${res.id}`, {
+						genres: value.genres,
+						time: time,
+					});
+				})
+				.catch((error) => {
+					console.error({ error });
 				});
-			})
-			.catch((error) => {
-				console.error({ error });
-			});
-	};
+		},
+		[
+			homeState.hour,
+			homeState.min,
+			homeState.selectedId,
+			homeState.title,
+			navigate,
+		]
+	);
 
-	goLand = (e) => {
-		e.preventDefault();
-		this.props.history.push("/");
-	};
+	const goLand = useCallback(
+		(e) => {
+			e.preventDefault();
+			navigate("/");
+		},
+		[navigate]
+	);
 
-	componentDidMount() {
-		window.addEventListener("scroll", this.handleScroll);
-	}
+	useEffect(() => {
+		window.addEventListener("scroll", handleScroll);
+		return window.removeEventListener("scroll", handleScroll);
+	});
 
-	componentWillUnmount() {
-		window.removeEventListener("scroll", this.handleScroll);
-	}
-
-	handleScroll = (e) => {
-		this.setState({
-			windowHeight: window.pageYOffset,
-		});
-		this.errActivate();
-	};
-
-	errActivate = () => {
+	const errActivate = useCallback(() => {
 		if (window.innerWidth < 450) {
-			if (this.state.windowHeight >= window.innerHeight / 3) {
-				this.setState({
+			if (homeState.windowHeight >= window.innerHeight / 3) {
+				setHomeState({
+					...homeState,
 					titleTouch: true,
 					timeTouch: true,
 					genTouch: true,
 				});
 			}
-		} else if (this.state.windowHeight >= window.innerHeight / 2) {
-			this.setState({
+		} else if (homeState.windowHeight >= window.innerHeight / 2) {
+			setHomeState({
+				...homeState,
 				titleTouch: true,
 				timeTouch: true,
 				genTouch: true,
 			});
 		}
-	};
+	}, [homeState]);
+	const handleScroll = useCallback(
+		(e) => {
+			setHomeState({
+				...homeState,
+				windowHeight: window.pageYOffset,
+			});
+			errActivate();
+		},
+		[errActivate, homeState]
+	);
 
-	render() {
-		return (
-			<PlaylistContext.Consumer>
-				{(value) => {
-					let genres = value.genres.map((genre) => (
-						<GenreCheck
-							id={genre.id}
-							name={genre.name}
-							selected={this.state.selectedGen}
-							key={genre.id}
-						/>
-					));
+	return (
+		<PlaylistContext.Consumer>
+			{(value) => {
+				let genres = value.genres.map((genre) => (
+					<GenreCheck
+						id={genre.id}
+						name={genre.name}
+						selected={homeState.selectedGen}
+						key={genre.id}
+					/>
+				));
 
-					if (genres.length === 0)
-						return <h1 className="loading">Loading</h1>;
+				if (genres.length === 0) return <h1 className="loading">Loading</h1>;
 
-					let minutes = this.minArr().map((min) => {
-						if (min < 10)
-							return (
-								<option value={min} key={min}>
-									0{min}
-								</option>
-							);
-						else
-							return (
-								<option value={min} key={min}>
-									{min}
-								</option>
-							);
-					});
-
-					let hours = this.hourArr().map((min) => {
+				let minutes = minArr().map((min) => {
+					if (min < 10)
+						return (
+							<option value={min} key={min}>
+								0{min}
+							</option>
+						);
+					else
 						return (
 							<option value={min} key={min}>
 								{min}
 							</option>
 						);
-					});
+				});
 
-					const timeError = this.validateTime();
-					const genreError = this.validateGenre();
-					const titleError = this.validateTitle();
-
+				let hours = hourArr().map((min) => {
 					return (
-						genres && (
-							<div id="play-stage">
-								<form>
-									<div id="input-wrap">
-										<div className="inputs">
-											<label htmlFor="title-input">
-												Playlist Name:{" "}
-											</label>
-											<input
-												type="text"
-												id="title-input"
-												onChange={this.titleChange}
-												className="user-inputs"
-											/>
-											{this.state.titleTouch && (
-												<ValidationError
-													message={titleError}
-												/>
-											)}
-										</div>
-										<div className="inputs">
-											<label htmlFor="hour-length">
-												Playlist length:{" "}
-											</label>
-											<select
-												onChange={this.hourChange}
-												className="user-inputs"
-											>
-												<option value={null}>
-													Hr(s)
-												</option>
-												{hours}
-											</select>
-											:
-											<select
-												onChange={this.minChange}
-												className="user-inputs"
-											>
-												<option value={null}>
-													Min(s)
-												</option>
-												{minutes}
-											</select>
-											{this.state.timeTouch && (
-												<ValidationError
-													message={timeError}
-												/>
-											)}
-										</div>
-									</div>
-									<fieldset onChange={this.fieldChange}>
-										<legend>Choose your genre!</legend>
-										{this.state.genTouch && (
-											<ValidationError
-												message={genreError}
-											/>
-										)}
-										<div id="genres">{genres}</div>
-									</fieldset>
-									<div id="button-wrap">
-										<button
-											type="submit"
-											id="create"
-											onClick={(e) =>
-												this.subHandle(e, value)
-											}
-											disabled={
-												timeError ||
-												genreError ||
-												titleError
-											}
-										>
-											Create your playlist!
-										</button>
-										<button
-											id="create"
-											onClick={(e) => this.goLand(e)}
-										>
-											Return Home
-										</button>
-									</div>
-								</form>
-							</div>
-						)
+						<option value={min} key={min}>
+							{min}
+						</option>
 					);
-				}}
-			</PlaylistContext.Consumer>
-		);
-	}
+				});
+
+				const timeError = validateTime();
+				const genreError = validateGenre();
+				const titleError = validateTitle();
+
+				return (
+					genres && (
+						<div id="play-stage">
+							<form>
+								<div id="input-wrap">
+									<div className="inputs">
+										<label htmlFor="title-input">Playlist Name: </label>
+										<input
+											type="text"
+											id="title-input"
+											onChange={titleChange}
+											className="user-inputs"
+										/>
+										{homeState.titleTouch && (
+											<ValidationError message={titleError} />
+										)}
+									</div>
+									<div className="inputs">
+										<label htmlFor="hour-length">Playlist length: </label>
+										<select onChange={hourChange} className="user-inputs">
+											<option value={null}>Hr(s)</option>
+											{hours}
+										</select>
+										:
+										<select onChange={minChange} className="user-inputs">
+											<option value={null}>Min(s)</option>
+											{minutes}
+										</select>
+										{homeState.timeTouch && (
+											<ValidationError message={timeError} />
+										)}
+									</div>
+								</div>
+								<fieldset onChange={fieldChange}>
+									<legend>Choose your genre!</legend>
+									{homeState.genTouch && (
+										<ValidationError message={genreError} />
+									)}
+									<div id="genres">{genres}</div>
+								</fieldset>
+								<div id="button-wrap">
+									<button
+										type="submit"
+										id="create"
+										onClick={(e) => subHandle(e, value)}
+										disabled={timeError || genreError || titleError}
+									>
+										Create your playlist!
+									</button>
+									<button id="create" onClick={(e) => goLand(e)}>
+										Return Home
+									</button>
+								</div>
+							</form>
+						</div>
+					)
+				);
+			}}
+		</PlaylistContext.Consumer>
+	);
 }

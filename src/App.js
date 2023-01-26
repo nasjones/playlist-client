@@ -37,7 +37,6 @@ class App extends Component {
 	}
 
 	fetcher = () => {
-		console.log(process.env.TEST);
 		let endpoint = config.ENDPOINT;
 		const options = {
 			method: "GET",
@@ -98,13 +97,16 @@ class App extends Component {
 					<main id="stage">
 						<Routes>
 							<Route exact path="/" element={<Landing />} />
-							<Route path="/homepage" component={<Homepage />} />
-							<Route path="/existing-playlists" component={ExistingPlaylists} />
+							<Route path="/homepage" element={<Homepage />} />
+							<Route
+								path="/existing-playlists"
+								element={<ExistingPlaylists />}
+							/>
 							<Route
 								path="/playlist-display/:playlistId"
-								component={<PlaylistDisplay />}
+								element={<PlaylistDisplay />}
 							/>
-							<Route component={<NotFoundPage />} />
+							<Route element={<NotFoundPage />} />
 						</Routes>
 					</main>
 				</PlaylistContext.Provider>
