@@ -19,22 +19,14 @@ export default function PlaylistDisplay() {
 	});
 
 	const setErrorTrue = useCallback(() => {
-		setPlaylistState({ ...playlistState, error: true });
-	}, [playlistState]);
-
-	const setLoaded = useCallback(
-		(bool) => {
-			setPlaylistState({ ...playlistState, loaded: bool });
-		},
-		[playlistState]
-	);
+		setPlaylistState(prev => ({ ...prev, error: true }));
+	}, []);
 
 	const fetcher = useCallback(
 		(playlistId) => {
-			setPlaylistState({ playlist: null, songs: [] });
+			setPlaylistState(prev => ({ ...prev, playlist: null, songs: [], loaded: false, error: null }));
 
-			setLoaded(false);
-			const newValues = { ...playlistState };
+
 			//this makes the first get request to the playlist endpoint to get the playlist information
 			fetch(config.ENDPOINT + `/playlists/${playlistId}`, {
 				method: "GET",
@@ -48,8 +40,6 @@ export default function PlaylistDisplay() {
 					return res.json();
 				})
 				.then((playlist) => {
-					newValues.playlist = playlist;
-					newValues.genreName = playlist.genre_name;
 
 					//this rand value is made to offset the songs chosen to keep them random
 					let rand = Math.floor(Math.random() * 400);
@@ -59,7 +49,7 @@ export default function PlaylistDisplay() {
 						"&type=track&limit=50&offset=" +
 						rand;
 
-					let fetData = {
+					let fetchData = {
 						qString: queryString,
 					};
 					//this post request is what is made to the spotify api with the genre information
@@ -69,7 +59,7 @@ export default function PlaylistDisplay() {
 							"content-type": "application/json",
 							Authorization: `Bearer ${config.API_KEY}`,
 						},
-						body: JSON.stringify(fetData),
+						body: JSON.stringify(fetchData),
 					})
 						.then((res3) => {
 							if (!res3.ok) return res3.json().then((e) => Promise.reject(e));
@@ -78,6 +68,7 @@ export default function PlaylistDisplay() {
 						.then((response) => {
 							let runtime = 0;
 							let chosen = [];
+							let songList = [];
 							//this adds songs to the playlist until the runtime criteria is met
 							while (runtime < playlist.length) {
 								let trackChoice = Math.floor(Math.random() * 50);
@@ -85,10 +76,10 @@ export default function PlaylistDisplay() {
 								if (!chosen.includes(trackChoice)) {
 									chosen.push(trackChoice);
 									let artists = [];
-									for (const element of response.tracks.items[trackChoice]
-										.artists)
+									for (const element of response.tracks.items[trackChoice].artists)
 										artists.push(element.name);
 
+									console.log(response);
 									let song = {
 										id: response.tracks.items[trackChoice].id,
 										url: response.tracks.items[trackChoice].external_urls
@@ -99,12 +90,17 @@ export default function PlaylistDisplay() {
 										artist: artists,
 									};
 									runtime += song.length;
-									newValues.songs.push(song);
+									songList.push(song);
 								}
 							}
-
-							newValues.loaded = true;
-							setPlaylistState(newValues);
+							console.log(playlist);
+							setPlaylistState(prev => ({
+								...prev,
+								playlist: playlist,
+								genreName: playlist.genre_name,
+								songs: songList,
+								loaded: true
+							}));
 						})
 						.catch((error2) => {
 							console.error({ error2 });
@@ -115,31 +111,30 @@ export default function PlaylistDisplay() {
 					console.error({ error });
 					setErrorTrue();
 				});
-		},
-		[setErrorTrue, setLoaded, playlistState]
+		}, [setErrorTrue]
 	);
 
 	const resize = useCallback(() => {
 		let display = window.innerWidth >= 850;
-		if (display) {
-			setPlaylistState({ ...playlistState, hidden: false });
-		} else {
-			setPlaylistState({ ...playlistState, hidden: true });
-		}
-	}, [playlistState]);
+
+		setPlaylistState(prev => ({ ...prev, hidden: !display }));
+
+	}, []);
 
 	useEffect(() => {
 		fetcher(playlistId);
-
 		resize();
-	});
+
+		window.addEventListener("resize", resize);
+		return () => window.removeEventListener("resize", resize);
+	}, [playlistId, fetcher, resize]);
 
 	if (!playlistState.loaded && playlistState.error === null)
 		return <h1 className="loading">Loading..</h1>;
 
 	if (playlistState.error === true)
 		return (
-			<div>
+			<div className="error-wrap">
 				<h1 className="error">
 					Sorry there was an error with this request. Maybe try again later or
 					try something else.
