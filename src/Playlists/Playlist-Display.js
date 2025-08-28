@@ -132,7 +132,7 @@ export default function PlaylistDisplay() {
 		fetcher(playlistId);
 
 		resize();
-	}, []);
+	}, [fetcher, playlistId, resize]);
 
 	if (!playlistState.loaded && playlistState.error === null)
 		return <h1 className="loading">Loading..</h1>;
